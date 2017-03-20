@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -38,6 +39,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
 		window = primaryStage;
 		primaryStage.setTitle("NCLEX Analytics");
 
@@ -122,7 +124,14 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 		browseButton.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Select an Excel Folder");
-			fileChooser.showOpenDialog(stage);
+			File file = fileChooser.showOpenDialog(stage);
+			String excelFileName = file.getName();
+			ExcelParsing excelParser = new ExcelParsing(excelFileName);
+			try {
+				excelParser.parse();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		});
 		Button studentButton = new Button("Student Screen");
 		studentButton.setPrefSize(70, 20);

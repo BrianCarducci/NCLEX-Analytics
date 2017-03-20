@@ -12,17 +12,23 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * A dirty simple program that reads an Excel file.
- * 
+ *
  * @author www.codejava.net
  *
  */
+
 public class ExcelParsing {
 	Hashtable<String, Student> hash;
+	private String excelFilePath;
+
+	public ExcelParsing(String excelFilePath) {
+		this.excelFilePath = excelFilePath;
+	}
 
 	public Hashtable<String, Student> parse() throws IOException {
-		
-		String excelFilePath = "nclex.xls"; //file to read data from
-		
+
+		//String excelFilePath = "nclex.xls"; //file to read data from
+
 		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
 		HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
 		DataFormatter formatter = new DataFormatter();
@@ -32,7 +38,7 @@ public class ExcelParsing {
 		sheet = workbook.getSheetAt(0);
 		int numRows = 0;
 		int numCols = 0;
-		
+
 		//get number of rows
 		for (;;) {
 			String text = formatter.formatCellValue(sheet.getRow(numRows + 1).getCell(0));
@@ -41,7 +47,7 @@ public class ExcelParsing {
 			} else
 				break;
 		}
-		
+
 		//get number of columns
 		for (;;) {
 			String text = formatter.formatCellValue(sheet.getRow(0).getCell(numCols));
@@ -64,13 +70,13 @@ public class ExcelParsing {
 			}
 			if(studentArray[2] != null){
 				if(hash.containsKey(studentArray[2])){
-					
+
 				}
 				hash.put(studentArray[2], new Student(studentArray[0], studentArray[1], studentArray[2], "junior"));
-				
+
 			}
-			
-			
+
+
 			System.out.println("");
 		}
 
