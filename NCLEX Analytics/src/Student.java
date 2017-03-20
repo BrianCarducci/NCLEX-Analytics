@@ -9,7 +9,7 @@ public class Student {
 	private ArrayList<PracticeAssessment> practiceList;
 	private ArrayList<ProctoredAssessment> proctoredList;
 
-	public Student(String firstName, String lastName,String studentId ,String cohort) {
+	public Student(String lastName, String firstName,String studentId ,String cohort) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.studentId = studentId;

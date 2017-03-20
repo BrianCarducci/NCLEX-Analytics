@@ -7,6 +7,9 @@ public class NCLEXDriver {
 	public NCLEXDriver() throws IOException{
 		excelParsing = new ExcelParsing();
 		hash = excelParsing.parse();
+		for (String key : hash.keySet()) {
+		    System.out.println(key + ":" + hash.get(key).getFirstName() + ", " + hash.get(key).getLastName() + ", " + hash.get(key).getStudentId());
+		}
 	}
 	
 	

@@ -54,7 +54,6 @@ public class ExcelParsing {
 		System.out.println(" ");
 
 		for (int r = 1; r <= numRows + 1; r++) {
-
 			studentArray = new String[10];
 
 			for (int c = 0; c < 10; c++) {
@@ -63,6 +62,15 @@ public class ExcelParsing {
 				System.out.print("\t\t");
 
 			}
+			if(studentArray[2] != null){
+				if(hash.containsKey(studentArray[2])){
+					
+				}
+				hash.put(studentArray[2], new Student(studentArray[0], studentArray[1], studentArray[2], "junior"));
+				
+			}
+			
+			
 			System.out.println("");
 		}
 
