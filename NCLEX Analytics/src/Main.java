@@ -11,8 +11,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
@@ -22,6 +24,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 
 public class Main extends Application implements EventHandler<ActionEvent>{
@@ -32,6 +35,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 	private Scene scene, studentScene;
 	private BorderPane layout, studentLayout;
 	private TableView<Assessment> studentTable;
+	private ToggleGroup studentRadioGroup;
+	private RadioButton proctoredButton, practiceButton;
 
 	public static void main(String[] args){
 		launch(args);
@@ -48,7 +53,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
 		layout = new BorderPane();
 		layout.setTop(addHBox(primaryStage));
-		layout.setLeft(addFlowPane(primaryStage));
+		layout.setLeft(addVBox(primaryStage));
 
 		try {
 			FXMLLoader loader = new FXMLLoader(Main.class.getResource("StudentTable.fxml"));
@@ -71,10 +76,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
 		studentTable = new TableView<>();
 		studentTable.setItems(getAssessments());
+		studentTable.setPrefSize(1000, 500);
 		studentTable.getColumns().addAll(nameColumn, scoreColumn, focusColumn);
 
 		studentLayout.setTop(addHBox(primaryStage));
 		studentLayout.setCenter(studentTable);
+		studentLayout.setLeft(addStudentVBox(primaryStage));
 		studentScene = new Scene(studentLayout);
 
 		scene = new Scene(layout, 1000, 500);
@@ -116,8 +123,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 	    return hbox;
 	}
 
-	public FlowPane addFlowPane(Stage stage) {
-		FlowPane flowPane = new FlowPane();
+	public VBox addVBox(Stage stage) {
+		VBox vbox = new VBox();
 
 		Button browseButton = new Button("Browse...");
 		browseButton.setPrefSize(70, 20);
@@ -139,8 +146,25 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 			title.setText("Student Name");
 			stage.setScene(studentScene);
 		});
-		flowPane.getChildren().addAll(browseButton, studentButton);
-		return flowPane;
+		vbox.getChildren().addAll(browseButton, studentButton);
+		return vbox;
+	}
+
+	public VBox addStudentVBox(Stage stage) {
+		VBox vbox = new VBox();
+
+		studentRadioGroup = new ToggleGroup();
+
+		proctoredButton = new RadioButton("Proctored");
+		proctoredButton.setToggleGroup(studentRadioGroup);
+		proctoredButton.setSelected(true);
+
+		practiceButton = new RadioButton("Practice");
+		practiceButton.setToggleGroup(studentRadioGroup);
+
+		vbox.getChildren().addAll(proctoredButton, practiceButton);
+
+		return vbox;
 	}
 
 	public ObservableList<Assessment> getAssessments() {
