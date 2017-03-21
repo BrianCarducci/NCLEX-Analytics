@@ -10,8 +10,8 @@ public class Student {
 	private ArrayList<ProctoredAssessment> proctoredList;
 
 	public Student(String lastName, String firstName,String studentId ,String cohort) {
-		this.firstName = firstName;
 		this.lastName = lastName;
+		this.firstName = firstName;
 		this.studentId = studentId;
 		this.cohort = cohort;
 		practiceList = new ArrayList<PracticeAssessment>();

@@ -9,6 +9,7 @@ public class NCLEXDriver {
 		excelParsing = new ExcelParsing("nclex.xls");
 		hash = excelParsing.parse();
 		printStudents(hash);
+		
 
 	}
 

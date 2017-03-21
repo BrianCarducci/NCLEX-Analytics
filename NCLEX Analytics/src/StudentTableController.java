@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.util.Hashtable;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -11,7 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class StudentTableController {
-
+	Hashtable<String, Student> hash;
+	ExcelParsing excelParsing;
 	@FXML
 	private TextField filterField;
 	@FXML
@@ -26,7 +30,19 @@ public class StudentTableController {
 	private ObservableList<Student> masterData = FXCollections.observableArrayList();
 
 	public StudentTableController() {
-		masterData.add(new Student("Hans", "Muster", "1", "acc"));
+		excelParsing = new ExcelParsing("nclex.xls");
+		try {
+			hash = excelParsing.parse();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (String key : hash.keySet()) {
+			masterData.add(hash.get(key));
+		}
+		
+		/*masterData.add(new Student("Hans", "Muster", "1", "acc"));
 		masterData.add(new Student("Ruth", "Mueller", "2", "acc"));
 		masterData.add(new Student("Heinz", "Kurz", "3", "acc"));
 		masterData.add(new Student("Cornelia", "Meier", "4", "acc"));
@@ -34,14 +50,15 @@ public class StudentTableController {
 		masterData.add(new Student("Lydia", "Kunz", "6", "acc"));
 		masterData.add(new Student("Anna", "Best", "7", "acc"));
 		masterData.add(new Student("Stefan", "Meier", "8", "acc"));
-		masterData.add(new Student("Martin", "Mueller", "9", "acc"));
+		masterData.add(new Student("Martin", "Mueller", "9", "acc"));*/
 	}
 
 	@FXML
 	private void initialize() {
 		// 0. Initialize the columns.
-		firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+		firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+		
 		// cohortColumn.setCellValueFactory(cellData ->
 		// cellData.getValue().cohortProperty());
 		// 1. Wrap the ObservableList in a FilteredList (initially display all
