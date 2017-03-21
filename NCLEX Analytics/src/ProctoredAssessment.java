@@ -1,14 +1,19 @@
 
 public class ProctoredAssessment {
-	String date, percentage, proficiencyLevel, focusedReviewTime, probOfPassing;
+	String name, date, percentage, proficiencyLevel, focusedReviewTime, probOfPassing;
 
-	public ProctoredAssessment(String date, String percentage, String proficiencyLevel, String focusedReviewTime,
-			String probOfPassing) {
+	public ProctoredAssessment(String name, String date, String percentage, String proficiencyLevel,
+			String focusedReviewTime, String probOfPassing) {
+		this.name = name;
 		this.date = date;
 		this.percentage = percentage;
 		this.proficiencyLevel = proficiencyLevel;
 		this.focusedReviewTime = focusedReviewTime;
 		this.probOfPassing = probOfPassing;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getDate() {

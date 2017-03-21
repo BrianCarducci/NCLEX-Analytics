@@ -27,7 +27,7 @@ public class ExcelParsing {
 
 	public Hashtable<String, Student> parse() throws IOException {
 
-		//String excelFilePath = "nclex.xls"; //file to read data from
+		// String excelFilePath = "nclex.xls"; //file to read data from
 
 		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
 		HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
@@ -39,7 +39,7 @@ public class ExcelParsing {
 		int numRows = 0;
 		int numCols = 0;
 
-		//get number of rows
+		// get number of rows
 		for (;;) {
 			String text = formatter.formatCellValue(sheet.getRow(numRows + 1).getCell(0));
 			if (text.length() > 0) {
@@ -48,7 +48,7 @@ public class ExcelParsing {
 				break;
 		}
 
-		//get number of columns
+		// get number of columns
 		for (;;) {
 			String text = formatter.formatCellValue(sheet.getRow(0).getCell(numCols));
 			if (text.length() > 0) {
@@ -68,21 +68,35 @@ public class ExcelParsing {
 				System.out.print("\t\t");
 
 			}
-			if(studentArray[2] != null){
-				if(hash.containsKey(studentArray[2])){
-
+			String lastName = studentArray[0];
+			String firstName = studentArray[1];
+			String studentId = studentArray[2];
+			String assessmentName = studentArray[3];
+			String date = studentArray[4];
+			String percentage = studentArray[5];
+			String proficiencyLevel = studentArray[6];
+			String focusedReviewTime = studentArray[8];
+			String probOfPassing = studentArray[9];
+			if (studentId != null) {
+				if (!hash.containsKey(studentId)) {
+					hash.put(studentId, new Student(lastName, firstName, studentId, "junior"));
 				}
-				hash.put(studentArray[2], new Student(studentArray[0], studentArray[1], studentArray[2], "junior"));
 
+				if (assessmentName.contains("practice") || assessmentName.contains("Practice")) {
+					hash.get(studentId).setPracticeAssessment(
+							new PracticeAssessment(assessmentName, date, percentage, focusedReviewTime));
+				} else {
+					hash.get(studentId).setProctoredAssessment(new ProctoredAssessment(assessmentName, date, percentage,
+							proficiencyLevel, focusedReviewTime, probOfPassing));
+				}
 			}
-
 
 			System.out.println("");
 		}
 
 		workbook.close();
 		inputStream.close();
-		System.out.println("----------------------------------------------------------------------------------");
+		System.out.println("*****************************************************************************************");
 
 		return hash;
 	}

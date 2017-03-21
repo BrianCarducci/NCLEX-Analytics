@@ -1,12 +1,16 @@
 
 public class PracticeAssessment {
-	String date, percentage, proficiencyLevel, focusedReviewTime;
+	String name, date, percentage, focusedReviewTime;
 
-	public PracticeAssessment(String date, String percentage, String proficiencyLevel, String focusedReviewTime) {
+	public PracticeAssessment(String name, String date, String percentage, String focusedReviewTime) {
+		this.name = name;
 		this.date = date;
 		this.percentage = percentage;
-		this.proficiencyLevel = proficiencyLevel;
 		this.focusedReviewTime = focusedReviewTime;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getDate() {
@@ -15,10 +19,6 @@ public class PracticeAssessment {
 
 	public String getPercentage() {
 		return percentage;
-	}
-
-	public String getProficiencyLevel() {
-		return proficiencyLevel;
 	}
 
 	public String getFocusedReviewTime() {
