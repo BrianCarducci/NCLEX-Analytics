@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -94,5 +95,18 @@ public class StudentTableController {
 
 		// 5. Add sorted (and filtered) data to the table.
 		studentTable.setItems(sortedData);
+		studentTable.setRowFactory(tv -> {
+			TableRow<Student> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Student rowData = row.getItem();
+					System.out.println("First Name: " + rowData.getFirstName());
+					System.out.println("Last Name: " + rowData.getLastName());
+					System.out.println("Student Id: " + rowData.getStudentId());
+				}
+			});
+			return row;
+		});
+
 	}
 }
