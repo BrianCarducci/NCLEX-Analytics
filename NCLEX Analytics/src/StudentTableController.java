@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.util.Hashtable;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -9,104 +6,75 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 
 public class StudentTableController {
-	Hashtable<String, Student> hash;
-	ExcelParsing excelParsing;
-	@FXML
-	private TextField filterField;
-	@FXML
-	private TableView<Student> studentTable;
-	@FXML
-	private TableColumn<Student, String> firstNameColumn;
-	@FXML
-	private TableColumn<Student, String> lastNameColumn;
-	@FXML
-	private TableColumn<Student, String> cohortColumn;
 
-	private ObservableList<Student> masterData = FXCollections.observableArrayList();
+    @FXML
+    private TextField filterField;
+    @FXML
+    private TableView<Student> studentTable;
+    @FXML
+    private TableColumn<Student, String> firstNameColumn;
+    @FXML
+    private TableColumn<Student, String> lastNameColumn;
+    @FXML
+    private TableColumn<Student, String> cohortColumn;
 
-	public StudentTableController() {
-		excelParsing = new ExcelParsing("nclex.xls");
-		try {
-			hash = excelParsing.parse();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for (String key : hash.keySet()) {
-			masterData.add(hash.get(key));
-		}
-		
-		/*masterData.add(new Student("Hans", "Muster", "1", "acc"));
-		masterData.add(new Student("Ruth", "Mueller", "2", "acc"));
-		masterData.add(new Student("Heinz", "Kurz", "3", "acc"));
-		masterData.add(new Student("Cornelia", "Meier", "4", "acc"));
-		masterData.add(new Student("Werner", "Meyer", "5", "acc"));
-		masterData.add(new Student("Lydia", "Kunz", "6", "acc"));
-		masterData.add(new Student("Anna", "Best", "7", "acc"));
-		masterData.add(new Student("Stefan", "Meier", "8", "acc"));
-		masterData.add(new Student("Martin", "Mueller", "9", "acc"));*/
-	}
+    private ObservableList<Student> masterData = FXCollections.observableArrayList();
 
-	@FXML
-	private void initialize() {
-		// 0. Initialize the columns.
-		lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-		firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-		
-		// cohortColumn.setCellValueFactory(cellData ->
-		// cellData.getValue().cohortProperty());
-		// 1. Wrap the ObservableList in a FilteredList (initially display all
-		// data).
-		FilteredList<Student> filteredData = new FilteredList<>(masterData, p -> true);
 
-		// 2. Set the filter Predicate whenever the filter changes.
-		filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-			filteredData.setPredicate(Student -> {
-				// If filter text is empty, display all Students.
-				if (newValue == null || newValue.isEmpty()) {
-					return true;
-				}
+    public StudentTableController() {
+        masterData.add(new Student("Hans", "Muster", "acc"));
+        masterData.add(new Student("Ruth", "Mueller", "acc"));
+        masterData.add(new Student("Heinz", "Kurz", "acc"));
+        masterData.add(new Student("Cornelia", "Meier", "acc"));
+        masterData.add(new Student("Werner", "Meyer", "acc"));
+        masterData.add(new Student("Lydia", "Kunz", "acc"));
+        masterData.add(new Student("Anna", "Best", "acc"));
+        masterData.add(new Student("Stefan", "Meier", "acc"));
+        masterData.add(new Student("Martin", "Mueller", "acc"));
+    }
 
-				// Compare first name and last name of every Student with filter
-				// text.
-				String lowerCaseFilter = newValue.toLowerCase();
 
-				if (Student.getFirstName().toLowerCase().contains(lowerCaseFilter)) {
-					return true; // Filter matches first name.
-				} else if (Student.getLastName().toLowerCase().contains(lowerCaseFilter)) {
-					return true; // Filter matches last name.
-				}
-				return false; // Does not match.
-			});
-		});
+    @FXML
+    private void initialize() {
+        // 0. Initialize the columns.
+        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+        //cohortColumn.setCellValueFactory(cellData -> cellData.getValue().cohortProperty());
+        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Student> filteredData = new FilteredList<>(masterData, p -> true);
 
-		// 3. Wrap the FilteredList in a SortedList.
-		SortedList<Student> sortedData = new SortedList<>(filteredData);
+        // 2. Set the filter Predicate whenever the filter changes.
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(Student -> {
+                // If filter text is empty, display all Students.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
 
-		// 4. Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(studentTable.comparatorProperty());
+                // Compare first name and last name of every Student with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
 
-		// 5. Add sorted (and filtered) data to the table.
-		studentTable.setItems(sortedData);
-		studentTable.setRowFactory(tv -> {
-			TableRow<Student> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 2 && (!row.isEmpty())) {
-					Student rowData = row.getItem();
-					System.out.println("First Name: " + rowData.getFirstName());
-					System.out.println("Last Name: " + rowData.getLastName());
-					System.out.println("Student Id: " + rowData.getStudentId());
-				}
-			});
-			return row;
-		});
+                if (Student.getFirstName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (Student.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+                return false; // Does not match.
+            });
+        });
 
-	}
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<Student> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(studentTable.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        studentTable.setItems(sortedData);
+    }
 }

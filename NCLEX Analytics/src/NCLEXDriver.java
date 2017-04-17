@@ -6,10 +6,10 @@ public class NCLEXDriver {
 	ExcelParsing excelParsing;
 
 	public NCLEXDriver() throws IOException {
-		excelParsing = new ExcelParsing("nclex.xls");
-		hash = excelParsing.parse();
+		excelParsing = new ExcelParsing();
+		hash = excelParsing.parse("nclex.xls");
 		printStudents(hash);
-		
+
 
 	}
 

@@ -19,13 +19,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 public class ExcelParsing {
 	Hashtable<String, Student> hash;
-	private String excelFilePath;
 
-	public ExcelParsing(String excelFilePath) {
-		this.excelFilePath = excelFilePath;
-	}
+	public ExcelParsing() {}
 
-	public Hashtable<String, Student> parse() throws IOException {
+	public Hashtable<String, Student> parse(String excelFilePath) throws IOException {
 
 		// String excelFilePath = "nclex.xls"; //file to read data from
 
@@ -59,13 +56,13 @@ public class ExcelParsing {
 		System.out.println("Rows: " + numRows + " Columns: " + numCols);
 		System.out.println(" ");
 
-		for (int r = 1; r <= numRows + 1; r++) {
+		for (int r = 1; r < numRows + 1; r++) {
 			studentArray = new String[10];
 
 			for (int c = 0; c < 10; c++) {
 				studentArray[c] = formatter.formatCellValue(sheet.getRow(r).getCell(c));
-				System.out.print(studentArray[c]);
-				System.out.print("\t\t");
+				/*System.out.print(studentArray[c]);
+				System.out.print("\t\t");*/
 
 			}
 			String lastName = studentArray[0];
@@ -79,7 +76,17 @@ public class ExcelParsing {
 			String probOfPassing = studentArray[9];
 			if (studentId != null) {
 				if (!hash.containsKey(studentId)) {
+					/*for (String key : hash.keySet()) {
+						System.out.println("*"+hash.get(key).getFirstName() + " " + hash.get(key).getLastName() + ", id: "
+								+ hash.get(key).getStudentId());
+					}*/
 					hash.put(studentId, new Student(lastName, firstName, studentId, "junior"));
+					/*System.out.println("---------------------");
+					for (String key : hash.keySet()) {
+						System.out.println("*"+hash.get(key).getFirstName() + " " + hash.get(key).getLastName() + ", id: "
+								+ hash.get(key).getStudentId());
+					}
+					System.out.println("+++++++++++++++++++++");*/
 				}
 
 				if (assessmentName.contains("practice") || assessmentName.contains("Practice")) {
@@ -91,13 +98,11 @@ public class ExcelParsing {
 				}
 			}
 
-			System.out.println("");
+			//System.out.println("");
 		}
 
 		workbook.close();
 		inputStream.close();
-		System.out.println("*****************************************************************************************");
-
 		return hash;
 	}
 
